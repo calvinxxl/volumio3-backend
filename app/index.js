@@ -266,6 +266,43 @@ CoreCommandRouter.prototype.setSourceActive = function (data) {
   this.pushConsoleMessage('CoreCommandRouter::volumiosetSourceActive' + data);
   return this.musicLibrary.setSourceActive(data);
 };
+
+// Inputs management
+CoreCommandRouter.prototype.volumioAddToInputSources = function (data) {
+  this.pushConsoleMessage('CoreCommandRouter::volumioAddToBrowseSources' + data);
+  return this.musicLibrary.addToInputSources(data);
+};
+
+CoreCommandRouter.prototype.setInputActive = function (data) {
+  this.pushConsoleMessage('CoreCommandRouter::volumiosetInputActive' + data);
+  return this.musicLibrary.setInputActive(data);
+};
+
+CoreCommandRouter.prototype.volumioGetInputSources = function () {
+  this.pushConsoleMessage('CoreCommandRouter::volumioGetInputSources');
+  return this.musicLibrary.getInputSources();
+};
+
+CoreCommandRouter.prototype.setInputActive = function (data) {
+  this.pushConsoleMessage('CoreCommandRouter::volumiosetInputActive' + data);
+  return this.musicLibrary.setInputActive(data);
+};
+
+CoreCommandRouter.prototype.volumioUpdateToInputSources = function (name, data) {
+  this.pushConsoleMessage('CoreCommandRouter::volumioUpdateToInputSources');
+  return this.musicLibrary.updateInputSources(name, data);
+};
+
+CoreCommandRouter.prototype.volumioRemoveToInputSources = function (data) {
+  this.pushConsoleMessage('CoreCommandRouter::volumioRemoveToInputSources' + data);
+  return this.musicLibrary.removeInputSource(data);
+};
+
+CoreCommandRouter.prototype.volumioEnableInput = function (data) {
+  this.pushConsoleMessage('CoreCommandRouter::volumioEnableInput' + data);
+  return this.musicLibrary.enableInput(data);
+};
+
 // Volumio Get Playlist Index
 CoreCommandRouter.prototype.volumioGetPlaylistIndex = function (sUid) {
   this.pushConsoleMessage('CoreCommandRouter::volumioGetPlaylistIndex');

@@ -114,6 +114,8 @@ function CoreMusicLibrary (commandRouter) {
     ];
   }
 
+  self.inputSources = [{"id":"0", "name":"STREAMING", "icon":"volumioicon.png", "trackType":"input", "showButton":true}];
+
   // Start library promise as rejected, so requestors do not wait for it if not immediately available.
   // This is okay because no part of Volumio requires a populated library to function.
   // self.libraryReadyDeferred = null;
@@ -677,3 +679,89 @@ CoreMusicLibrary.prototype.searchOnPlugin = function (plugin_type, plugin_name, 
 
   return defer.promise;
 };
+
+// INPUTS HANDLING
+
+
+CoreMusicLibrary.prototype.addToInputSources = function (data) {
+  var self = this;
+
+  if (data.name != undefined) {
+    self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'CoreMusicLibrary::Adding input ' + data.name);
+
+    var replaced = false;
+
+    // searching for existing browse source
+    for (var i in self.inputSources) {
+      var source = self.inputSources[i];
+      if (source.name === data.name) {
+        source.uri = data.uri;
+        source.plugin_type = data.plugin_type;
+        source.plugin_name = data.plugin_name;
+        replaced = true;
+      }
+    }
+    if (replaced === false) { self.inputSources.push(data); }
+  }
+
+  return self.pushInputSources(self.getInputSources());
+};
+
+CoreMusicLibrary.prototype.setInputActive = function (uri) {
+  var self = this;
+
+  for (var i in self.inputSources) {
+    var source = self.inputSources[i];
+    if (source.uri == uri) {
+      source.active = true;
+    } else {
+      source.active = false;
+    }
+  }
+  return self.pushInputSources(self.getInputSources());
+};
+
+CoreMusicLibrary.prototype.getInputSources = function () {
+  var self = this;
+
+  return self.inputSources;
+};
+
+CoreMusicLibrary.prototype.pushInputSources = function (data) {
+  var self = this;
+  console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+  console.log(self.inputSources)
+  return this.commandRouter.broadcastMessage('pushInputSources', self.inputSources);
+};
+
+CoreMusicLibrary.prototype.updateInputSources = function (name, data) {
+  var self = this;
+
+  if (data && data.name != undefined) {
+    for (var i in self.inputSources) {
+      var source = self.inputSources[i];
+      if (source.name == name) {
+        source.name = data.name;
+        source.uri = data.uri;
+        source.plugin_type = data.plugin_type;
+        source.plugin_name = data.plugin_name;
+        if (data.albumart != undefined) {
+          source.albumart = data.albumart;
+        }
+      }
+    }
+  }
+  return self.pushInputSources(self.getInputSources());
+};
+
+CoreMusicLibrary.prototype.removeInputSource = function (name) {
+  var self = this;
+
+  if (name != undefined) {
+    self.inputSources = self.inputSources.filter(function (x) {
+      if (x.name !== name) { return true; }
+    });
+  }
+  return self.pushInputSources(self.getInputSources());
+};
+

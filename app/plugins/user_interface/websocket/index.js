@@ -392,17 +392,19 @@ function InterfaceWebUI (context) {
 
     connWebSocket.on('getInputSources', function () {
       var selfConnWebSocket = this;
-
-      var response = self.musicLibrary.executeBrowseSource('inputs');
-
-      if (response != undefined) {
-        response.then(function (result) {
-          selfConnWebSocket.emit('pushInputSources', result);
-        })
-          .fail(function () {
-            self.printToastMessage('error', self.commandRouter.getI18nString('COMMON.ERROR'), self.commandRouter.getI18nString('COMMON.NO_RESULTS'));
-          });
+      try {
+        var inputSources = self.commandRouter.getInputSources();
+        selfConnWebSocket.emit('pushInputSources', inputSources);
+      } catch(e) {
+        self.logger.error("Failed to retrieve inputs: " + e);
       }
+
+    });
+
+    connWebSocket.on('setInputActive', function (data) {
+      var selfConnWebSocket = this;
+
+      return self.commandRouter.setInputActive(data);
     });
 
     // TO DO: ADD TRANSLATIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
