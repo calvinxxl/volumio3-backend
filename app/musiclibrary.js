@@ -721,6 +721,15 @@ CoreMusicLibrary.prototype.setInputActive = function (uri) {
   return self.pushInputSources(self.getInputSources());
 };
 
+CoreMusicLibrary.prototype.enableInput = function (data) {
+  var self = this;
+
+  if (data && data.category && data.name && data.id) {
+    self.logger.info('Enabling input ' + data.id)
+    self.commandRouter.executeOnPlugin(data.category, data.name, 'enableInput', data);
+  }
+};
+
 CoreMusicLibrary.prototype.getInputSources = function () {
   var self = this;
 

@@ -401,10 +401,10 @@ function InterfaceWebUI (context) {
 
     });
 
-    connWebSocket.on('setInputActive', function (data) {
+    connWebSocket.on('enableInput', function (data) {
       var selfConnWebSocket = this;
 
-      return self.commandRouter.setInputActive(data);
+      return self.commandRouter.volumioEnableInput(data);
     });
 
     // TO DO: ADD TRANSLATIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
